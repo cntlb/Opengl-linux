@@ -43,3 +43,17 @@ leanopengl(1.6_shader_uniform)
 leanopengl(1.6_shader_moreattr)
 leanopengl(1.7_texture)
 leanopengl(1.7_texture2)
+
+
+function(leanopengl_cpp name)
+    project(${name})
+    set(CMAKE_CXX_FLAGS  -std=c++11)
+    add_executable(${name}
+            leanopengl/${name}.cpp
+            3rdparty/mylib/Shader.cpp
+            3rdparty/stb_image.c
+            3rdparty/mylib/GlutWrapper.cpp
+            )
+    target_link_libraries(${name} GL GLU glut m)
+endfunction()
+leanopengl_cpp(1.7_texture2pp)
