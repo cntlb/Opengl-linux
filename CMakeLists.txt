@@ -58,3 +58,8 @@ function(leanopengl_cpp name)
 endfunction()
 leanopengl_cpp(1.7_texture2pp)
 leanopengl_cpp(1.8_glm)
+leanopengl_cpp(1.8_transform)
+
+
+
+
