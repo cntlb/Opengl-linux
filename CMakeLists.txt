@@ -13,3 +13,17 @@ include_directories(/home/jmu/Desktop/test/opengl/include)
 add_executable(test1 test1.c)
 target_link_libraries(test1 GLEW glfw3 GL X11 pthread Xrandr Xi Xxf86vm m dl)
 
+function(gldemo name)
+    project(${name})
+    add_executable(${name} ${name}.c)
+    target_link_libraries(${name} GL GLU glut m)
+endfunction()
+
+gldemo(test2)
+gldemo(ge_graph)
+gldemo(gl_vertex)
+gldemo(gl_fly)
+gldemo(gl_vertexcolor)
+gldemo(gl_transform)
+gldemo(gl_teapot)
+
