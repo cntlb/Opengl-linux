@@ -15,7 +15,7 @@ public:
     void (*onKeyboard)(unsigned char key, int x, int y);
 
 public:
-    GlutWrapper():onPreDraw(0),onDraw(0),onIdle(0),onKeyboard(0){}
+    GlutWrapper();
     
     void init(int *argc, char * *argv);
 

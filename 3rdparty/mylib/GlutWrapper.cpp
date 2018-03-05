@@ -7,6 +7,10 @@
 // Window dimensions
 static const GLuint WIDTH = 800, HEIGHT = 600;
 
+GlutWrapper::GlutWrapper():onPreDraw(0),onDraw(0),onIdle(0),onKeyboard(GlutWrapper::keyboard){
+
+}
+
 void GlutWrapper::init(int *argc, char **argv) {
 
     /* GLUT环境初始化*/

@@ -125,9 +125,8 @@ static void display() {
 
 int main(int argc, char **argv) {
     GlutWrapper wrapper;
-            wrapper.onPreDraw = &onPreDraw;
-            wrapper.onDraw = &display;
-            wrapper.onKeyboard = &GlutWrapper::keyboard;
+    wrapper.onPreDraw = &onPreDraw;
+    wrapper.onDraw = &display;
     wrapper.init(&argc, argv);
     return 0;
 } 
