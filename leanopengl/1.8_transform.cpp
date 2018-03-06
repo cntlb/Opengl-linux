@@ -11,7 +11,7 @@
 
 #define LOG_TAG __FILE__
 
-Shader *shader;
+static Shader *shader;
 
 static GLuint VAO, texture1, texture2;
 static void onPreDraw(){
@@ -116,10 +116,10 @@ static void display() {
     //active textures
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
-    shader->setUniform("texture1", 0);
+    shader->setInt("texture1", 0);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    shader->setUniform("texture2", 1);
+    shader->setInt("texture2", 1);
 
     glm::mat4 trans;
     trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
@@ -137,7 +137,6 @@ int main(int argc, char **argv) {
     GlutWrapper wrapper;
     wrapper.onPreDraw = &onPreDraw,
     wrapper.onDraw = &display,
-    wrapper.onKeyboard = &GlutWrapper::keyboard;
     wrapper.init(&argc, argv);
     return 0;
 }

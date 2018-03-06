@@ -7,6 +7,9 @@
 
 #include <string>
 #include <GL/glut.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader {
 private:
@@ -22,8 +25,12 @@ public:
      * don't forget to activate/use the shader before setting uniforms!
      */
     void use();
-    void setUniform(const char* name, int value);
-    void setUniform(const char* name, float value);
+    void unUse();
+    GLint getLocation(const std::string &name)const;
+    void setInt(const std::string &name, int value);
+    void setFloat(const std::string &name, float value);
+    void setMat4(const std::string &name, const glm::mat4 &mat) const;
+
 };
 
 #endif //INC_1_8_GLM_SHADER_H

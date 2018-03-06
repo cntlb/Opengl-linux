@@ -7,25 +7,35 @@
 
 #include <cstdlib>
 
+struct GlutWrapper;
+/*
+ * 不接受参数,返回void
+ */
+typedef void (*FUNC_VV)();
+
+/*
+ * 接受unsigned char key, int x, int y, 返回void
+ * @param key 按键码
+ */
+typedef void (*OnKeyboard)(unsigned char key, int x, int y);
+
 struct GlutWrapper {
 public:
-    void (*onPreDraw)();
-    void (*onDraw)();
-    void (*onIdle)();
-    void (*onKeyboard)(unsigned char key, int x, int y);
+    FUNC_VV onPreDraw;
+    FUNC_VV onDraw;
+    FUNC_VV onIdle;
+    OnKeyboard onKeyboard;
 
 public:
-    GlutWrapper():onPreDraw(0),onDraw(0),onIdle(0),onKeyboard(0){}
-    
-    void init(int *argc, char * *argv);
+    GlutWrapper();
 
-    /* 定义对键盘的响应函数 */
-    static void keyboard(unsigned char key, int x, int y) {
-        /*按Esc键退出*/
-        if(27 == key){
-            exit(0);
-        }
-    }
+    GlutWrapper(FUNC_VV onPreDraw, FUNC_VV onDraw, FUNC_VV onIdle = 0);
+
+    virtual uint getWidth() const;
+
+    virtual uint getHigh() const;
+
+    void init(int *argc, char **argv);
 };
 
 
