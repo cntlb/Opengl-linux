@@ -7,7 +7,7 @@
 
 #define LOG_TAG __FILE__
 
-Shader *shader;
+static Shader *shader;
 
 static GLuint VAO, texture1, texture2;
 static void onPreDraw(){
@@ -71,8 +71,8 @@ static void onPreDraw(){
 
     GLfloat vertices[] = {
             // positions          // colors           // texture coords
-            0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-            0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+             0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+             0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
             -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
             -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
     };
@@ -112,10 +112,10 @@ static void display() {
     //active textures
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
-    shader->setUniform("texture1", 0);
+    shader->setInt("texture1", 0);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    shader->setUniform("texture2", 1);
+    shader->setInt("texture2", 1);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -124,9 +124,7 @@ static void display() {
 }
 
 int main(int argc, char **argv) {
-    GlutWrapper wrapper;
-    wrapper.onPreDraw = &onPreDraw;
-    wrapper.onDraw = &display;
-    wrapper.init(&argc, argv);
+    GlutWrapper(onPreDraw, display)
+            .init(&argc, argv);
     return 0;
 } 

@@ -10,18 +10,16 @@
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
 
-void onPreDraw(){
+static void onPreDraw(){
 
 }
 
-void onDraw(){
+static void onDraw(){
 
 }
 
 int main(int argc, char* argv[]){
-    GlutWrapper wrapper;
-    wrapper.onDraw = onDraw;
-    wrapper.onPreDraw = onPreDraw;
-    wrapper.init(&argc, argv);
+    GlutWrapper(onPreDraw, onDraw)
+            .init(&argc, argv);
     return 0;
 }

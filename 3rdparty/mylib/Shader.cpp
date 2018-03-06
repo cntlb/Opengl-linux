@@ -22,7 +22,7 @@ Shader::Shader(const GLchar *vertex_src, const GLchar *fragment_src) {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(shader, sizeof(log), 0, log);
-            LOGE("compile %s shader error:%s", type == GL_VERTEX_SHADER ? "vertex" : "fragment", log)
+            LOGE("compile %s shader error:\n%s", type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT", log)
         }
         return shader;
     };
@@ -49,12 +49,24 @@ void Shader::use() {
         glUseProgram(program);
 }
 
-void Shader::setUniform(const char *name, int value) {
-    glUniform1i(glGetUniformLocation(program, name), value);
+void Shader::unUse(){
+    glUseProgram(0);
 }
 
-void Shader::setUniform(const char *name, float value) {
-    glUniform1f(glGetUniformLocation(program, name), value);
+GLint Shader::getLocation(const std::string &name)const{
+    return glGetUniformLocation(program, name.c_str());
+}
+
+void Shader::setInt(const std::string &name, int value) {
+    glUniform1i(glGetUniformLocation(program, name.c_str()), value);
+}
+
+void Shader::setFloat(const std::string &name, float value) {
+    glUniform1f(glGetUniformLocation(program, name.c_str()), value);
+}
+
+void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const{
+    glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 GLuint Shader::getProgram() const {

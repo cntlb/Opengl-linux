@@ -47,7 +47,7 @@ leanopengl(1.7_texture2)
 
 function(leanopengl_cpp name)
     project(${name})
-    set(CMAKE_CXX_FLAGS  -std=c++11)
+    set(CMAKE_CXX_FLAGS  -std=c++14)
     add_executable(${name}
             leanopengl/${name}.cpp
             3rdparty/mylib/Shader.cpp
@@ -60,6 +60,10 @@ leanopengl_cpp(template)
 leanopengl_cpp(1.7_texture2pp)
 leanopengl_cpp(1.8_glm)
 leanopengl_cpp(1.8_transform)
+leanopengl_cpp(1.8_coordinate1)
+leanopengl_cpp(1.8_coordinate2)
+leanopengl_cpp(1.8_coordinate3)
+leanopengl_cpp(1.8_camera)
 
 
 
