@@ -63,7 +63,11 @@ leanopengl_cpp(1.8_transform)
 leanopengl_cpp(1.8_coordinate1)
 leanopengl_cpp(1.8_coordinate2)
 leanopengl_cpp(1.8_coordinate3)
-leanopengl_cpp(1.8_camera)
+leanopengl_cpp(1.10_camera)
+leanopengl_cpp(1.10_camera2)
+leanopengl_cpp(1.10_camera3)
+
+leanopengl_cpp(2.1_light)
 
 
 
