@@ -15,6 +15,7 @@ class Shader {
 private:
     GLuint program;
 public:
+    Shader(){};
     Shader(const std::string vertex_src, const std::string fragment_src);
     Shader(const GLchar *vertex_src, const GLchar *fragment_src);
 
