@@ -5,17 +5,19 @@
 #include <mylib/common.h>
 #include <mylib/Shader.h>
 #include <mylib/GlutWrapper.h>
+#include <mylib/camera.h>
 
 //glm
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <mylib/camera.h>
 
-#define LOG_TAG __LINE__
+#define LOG_TAG "2.1_light.cpp"
 
 static GLuint VAO, lightVAO;
 static Shader boxShader, lightShader;
-
+static Camera camera;
 static void onPreDraw(){
     const GLchar * box_vs = "#version 320 es\n"
             "layout(location=0) in vec3 aPos;\n"
@@ -110,13 +112,13 @@ static void onPreDraw(){
 static void onDraw(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     boxShader.use();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     glm::mat4 model, view, projection;
-    view = glm::lookAt(glm::vec3(0, 3, -3.0f),
-        glm::vec3(0,0,0),
-        glm::vec3(1,0,0)
-    );
-    projection = glm::perspective(glm::radians(45.0f), 800.0f/600, 0.1f, 100.0f);
-    boxShader.setMat4("model", model);
+    view = camera.GetViewMatrix();
+    projection = glm::perspective(glm::radians(camera.Zoom), 800.0f/600, 0.1f, 100.0f);
+
+    boxShader.setMat4("model", glm::mat4());
     boxShader.setMat4("view", view);
     boxShader.setMat4("projection", projection);
     glBindVertexArray(VAO);
@@ -126,6 +128,8 @@ static void onDraw(){
     lightShader.use();
     glm::mat4 M_light;
     M_light = glm::translate(M_light, glm::vec3(1, 1, -1));
+    M_light = glm::scale(M_light, glm::vec3(0.2f));
+
     lightShader.setMat4("model", M_light);
     lightShader.setMat4("view", view);
     lightShader.setMat4("projection", projection);
@@ -136,9 +140,77 @@ static void onDraw(){
     glutSwapBuffers();
 
 }
+void onIdle(){
+    onDraw();
+}
+
+void keyboard(unsigned char key, int x, int y){
+
+    switch (key)
+    {
+        case 'a':
+        case 'A':
+            camera.ProcessKeyboard(Camera_Movement::LEFT, 1);
+            break;
+        case 'd':
+        case 'D':
+            camera.ProcessKeyboard(Camera_Movement::RIGHT, 1);
+            break;
+        case 'w':
+        case 'W':
+            camera.ProcessKeyboard(Camera_Movement::FORWARD, 1);
+            break;
+        case 's':
+        case 'S':
+            camera.ProcessKeyboard(Camera_Movement::BACKWARD, 1);
+            break;
+        case 27:
+            exit(0);
+            break;
+    }
+}
+
+static int downX, downY, downKey;
+static bool mouseClick = false;
+
+void  Mouse( int i1, int status, int x, int y){
+//    LOGE("i1=%d, status=%d, x=%d, y=%d", i1,status,x,y);
+    if(status == GLUT_DOWN){
+        mouseClick = true;
+        downKey = i1;
+        downX = x;
+        downY = y;
+    }else{
+        mouseClick = false;
+    }
+
+    if(i1 == 3){
+        camera.ProcessMouseScroll(1);
+    }else if(i1 == 4){
+        camera.ProcessMouseScroll(-1);
+    }
+}
+
+void Motion(int x, int y){
+//    LOGE("x=%d, y=%d", x, y)
+    if(!mouseClick){
+        return;
+    }
+
+    if(downKey == GLUT_LEFT_BUTTON){
+        //屏幕像素点的y轴从上到下增加
+        camera.ProcessMouseMovement(x - downX, downY-y);
+        downX = x;
+        downY = y;
+    }
+}
 
 int main(int argc, char* argv[]){
-    GlutWrapper(onPreDraw, onDraw)
-            .init(&argc, argv);
+    GlutWrapper wrapper = GlutWrapper(onPreDraw, onDraw, onIdle);
+    wrapper.init2(&argc, argv);
+    glutKeyboardFunc(keyboard);
+    glutMouseFunc(Mouse);
+    glutMotionFunc(Motion);
+    wrapper.startLoop();
     return 0;
 }
