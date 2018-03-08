@@ -185,7 +185,7 @@ static void onDraw(){
 
     glm::vec3 front , up;
     front.y = sin(glm::radians(pitch));
-    front.x = -cos(glm::radians(pitch))*cos(glm::radians(yaw));
+    front.x = cos(glm::radians(pitch))*cos(glm::radians(yaw));
     front.z = -cos(glm::radians(pitch))*sin(glm::radians(yaw));
     front = glm::normalize(front);
 
@@ -214,7 +214,7 @@ static void onDraw(){
 }
 
 void onIdle(){
-//    time_escaps += 0.001;
+    time_escaps += 0.001;
     onDraw();
 }
 
@@ -224,19 +224,19 @@ void keyboard(unsigned char key, int x, int y){
     {
         case 'a':
         case 'A':
-            deltaX -= D;
+            deltaZ -= D;
             break;
         case 'd':
         case 'D':
-            deltaX += D;
+            deltaZ += D;
             break;
         case 'w':
         case 'W':
-            deltaZ -= D;
+            deltaX -= D;
             break;
         case 's':
         case 'S':
-            deltaZ += D;
+            deltaX += D;
             break;
         case 27:
             exit(0);
@@ -288,6 +288,8 @@ void Motion(int x, int y){
         pitch += 0.1*(y-downY);
         // 计算偏航角
         yaw += 0.1*(x-downX);
+        downX = x;
+        downY = y;
     }
 }
 
