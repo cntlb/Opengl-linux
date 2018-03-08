@@ -66,6 +66,7 @@ leanopengl_cpp(1.8_coordinate3)
 leanopengl_cpp(1.10_camera)
 leanopengl_cpp(1.10_camera2)
 leanopengl_cpp(1.10_camera3)
+leanopengl_cpp(1.10_camera4)
 
 leanopengl_cpp(2.1_light)
 
