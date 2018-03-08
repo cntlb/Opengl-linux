@@ -29,8 +29,10 @@ static void onPreDraw(){
             "}";
     const GLchar* box_fs = "#version 320 es\n"
             "out highp vec4 color;\n"
+            "uniform highp vec3 objectColor;\n"
+            "uniform highp vec3 lightColor;\n"
             "void main(){\n"
-            "   color = vec4(1.0f, 0.5f, 0.31f, 1.0f);\n"
+            "   color = vec4(objectColor*lightColor, 1.0f);\n"
             "}";
     const GLchar* light_fs = "#version 320 es\n"
             "out highp vec4 color;\n"
@@ -107,12 +109,13 @@ static void onPreDraw(){
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
+    camera.Position = glm::vec3(0,2,5);
 }
 
 static void onDraw(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     boxShader.use();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glm::mat4 model, view, projection;
     view = camera.GetViewMatrix();
@@ -121,6 +124,8 @@ static void onDraw(){
     boxShader.setMat4("model", glm::mat4());
     boxShader.setMat4("view", view);
     boxShader.setMat4("projection", projection);
+    boxShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+    boxShader.setVec3("lightColor",  0.5f, 1.0f, 0.0f);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
