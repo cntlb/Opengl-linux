@@ -22,7 +22,10 @@ Shader::Shader(const GLchar *vertex_src, const GLchar *fragment_src) {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(shader, sizeof(log), 0, log);
-            LOGE("compile %s shader error:\n%s", type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT", log)
+            LOGE("%s\n"
+                 "========================\n"
+                 "compile %s shader error:\n%s",
+                 source, type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT", log)
         }
         return shader;
     };
