@@ -20,6 +20,8 @@ static GLuint cubeVAO, lightVAO;
 static Shader boxShader, lightShader;
 static Camera camera;
 static int time_elapse;
+// lighting
+static glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 static void onPreDraw(){
     const GLchar * box_vs = "#version 320 es\n"
             "layout(location=0) in vec3 aPos;\n"
@@ -169,14 +171,14 @@ static void onDraw(){
     glm::mat4 model, view, projection;
     view = camera.GetViewMatrix();
     projection = glm::perspective(glm::radians(camera.Zoom), 800.0f/600, 0.1f, 100.0f);
-    model = glm::rotate(model, glm::radians(time_elapse*0.1f), glm::vec3(1,0,0));
+//    model = glm::rotate(model, glm::radians(time_elapse*0.1f), glm::vec3(1,0,0));
 
     boxShader.setMat4("model", model);
     boxShader.setMat4("view", view);
     boxShader.setMat4("projection", projection);
     boxShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
     boxShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-    boxShader.setVec3("lightPos", glm::vec3(0,2,3));
+    boxShader.setVec3("lightPos", lightPos);
     boxShader.setVec3("viewPos", camera.Position);
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -184,7 +186,7 @@ static void onDraw(){
 
     lightShader.use();
     glm::mat4 M_light;
-    M_light = glm::translate(M_light, glm::vec3(0,2,3));
+    M_light = glm::translate(M_light, lightPos);
     M_light = glm::scale(M_light, glm::vec3(0.2f));
 
     lightShader.setMat4("model", M_light);
@@ -202,25 +204,26 @@ void onIdle(){
     onDraw();
 }
 
+#define Dx 0.2
 void keyboard(unsigned char key, int x, int y){
 
     switch (key)
     {
         case 'a':
         case 'A':
-            camera.ProcessKeyboard(Camera_Movement::LEFT, 1);
+            camera.ProcessKeyboard(Camera_Movement::LEFT, Dx);
             break;
         case 'd':
         case 'D':
-            camera.ProcessKeyboard(Camera_Movement::RIGHT, 1);
+            camera.ProcessKeyboard(Camera_Movement::RIGHT, Dx);
             break;
         case 'w':
         case 'W':
-            camera.ProcessKeyboard(Camera_Movement::FORWARD, 1);
+            camera.ProcessKeyboard(Camera_Movement::FORWARD, Dx);
             break;
         case 's':
         case 'S':
-            camera.ProcessKeyboard(Camera_Movement::BACKWARD, 1);
+            camera.ProcessKeyboard(Camera_Movement::BACKWARD, Dx);
             break;
         case 27:
             exit(0);
