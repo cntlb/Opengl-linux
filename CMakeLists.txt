@@ -69,6 +69,9 @@ leanopengl_cpp(1.10_camera3)
 leanopengl_cpp(1.10_camera4)
 
 leanopengl_cpp(2.1_light)
+leanopengl_cpp(2.2_light)
+leanopengl_cpp(2.2_light2)
+leanopengl_cpp(2.2_light3)
 
 
 
