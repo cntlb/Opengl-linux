@@ -27,7 +27,12 @@ GlutWrapper::GlutWrapper(FUNC_VV onPreDraw, FUNC_VV onDraw, FUNC_VV onIdle):
 }
 
 void GlutWrapper::init(int *argc, char **argv) {
+    init2(argc, argv);
+    /* 进入GLUT消息循环，开始执行程序 */
+    glutMainLoop();
+}
 
+void GlutWrapper::init2(int *argc, char **argv) {
     /* GLUT环境初始化*/
     glutInit(argc, argv);
     /* 显示模式初始化 */
@@ -52,8 +57,9 @@ void GlutWrapper::init(int *argc, char **argv) {
     /* 注册键盘响应函数 */
     if (onKeyboard)
         glutKeyboardFunc(onKeyboard);
+}
 
-    /* 进入GLUT消息循环，开始执行程序 */
+void GlutWrapper::startLoop(){
     glutMainLoop();
 }
 

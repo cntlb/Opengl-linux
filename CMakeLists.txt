@@ -48,6 +48,7 @@ leanopengl(1.7_texture2)
 function(leanopengl_cpp name)
     project(${name})
     set(CMAKE_CXX_FLAGS  -std=c++14)
+    include_directories(3rdparty)
     add_executable(${name}
             leanopengl/${name}.cpp
             3rdparty/mylib/Shader.cpp
@@ -63,8 +64,34 @@ leanopengl_cpp(1.8_transform)
 leanopengl_cpp(1.8_coordinate1)
 leanopengl_cpp(1.8_coordinate2)
 leanopengl_cpp(1.8_coordinate3)
-leanopengl_cpp(1.8_camera)
+leanopengl_cpp(1.10_camera)
+leanopengl_cpp(1.10_camera2)
+leanopengl_cpp(1.10_camera3)
+leanopengl_cpp(1.10_camera4)
 
+leanopengl_cpp(2.1_light)
+leanopengl_cpp(2.2_light)
+leanopengl_cpp(2.2_light2)
+leanopengl_cpp(2.2_light3)
+leanopengl_cpp(2.3_material)
+leanopengl_cpp(2.3_material2)
+leanopengl_cpp(2.4_texture)
+leanopengl_cpp(2.4_texture2)
+leanopengl_cpp(2.4_texture3)
 
-
+function(leanopengl_assimp name)
+    project(${name})
+        set(CMAKE_CXX_FLAGS  -std=c++14)
+        include_directories(3rdparty)
+        link_directories(libs)
+        add_executable(${name}
+            leanopengl/${name}.cpp
+            3rdparty/mylib/Shader.cpp
+            3rdparty/stb_image.c
+            3rdparty/mylib/GlutWrapper.cpp
+            )
+        target_link_libraries(${name} GL GLU glut m assimp)
+endfunction()
+leanopengl_assimp(3.1_assimp)
+leanopengl_assimp(3.3_model_loading)
 

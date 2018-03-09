@@ -22,7 +22,10 @@ Shader::Shader(const GLchar *vertex_src, const GLchar *fragment_src) {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(shader, sizeof(log), 0, log);
-            LOGE("compile %s shader error:\n%s", type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT", log)
+            LOGE("%s\n"
+                 "========================\n"
+                 "compile %s shader error:\n%s",
+                 source, type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT", log)
         }
         return shader;
     };
@@ -67,6 +70,14 @@ void Shader::setFloat(const std::string &name, float value) {
 
 void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const{
     glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shader::setVec3(const std::string &name, GLfloat x, GLfloat y, GLfloat z)const{
+    glUniform3f(glGetUniformLocation(program, name.c_str()), x, y, z);
+}
+
+void Shader::setVec3(const std::string &name, const glm::vec3 &v)const{
+    glUniform3f(glGetUniformLocation(program, name.c_str()), v.x, v.y, v.z);
 }
 
 GLuint Shader::getProgram() const {

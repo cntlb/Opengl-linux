@@ -36,6 +36,9 @@ public:
     virtual uint getHigh() const;
 
     void init(int *argc, char **argv);
+    void init2(int *argc, char **argv);
+
+    void startLoop();
 };
 
 
