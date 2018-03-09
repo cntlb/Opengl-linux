@@ -93,4 +93,5 @@ function(leanopengl_assimp name)
         target_link_libraries(${name} GL GLU glut m assimp)
 endfunction()
 leanopengl_assimp(3.1_assimp)
+leanopengl_assimp(3.3_model_loading)
 

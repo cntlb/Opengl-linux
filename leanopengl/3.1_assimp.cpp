@@ -13,6 +13,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <model/Mesh.h>
+#include <model/model.h>
+
 #define LOG_TAG __LINE__
 
 static void onPreDraw(){
