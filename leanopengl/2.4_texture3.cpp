@@ -1,6 +1,6 @@
 //
 // Created by jmu on 18-3-7.
-// 光照 -- 纹理光照
+// 光照 -- 放射光纹理
 //
 
 #include <mylib/common.h>
@@ -17,7 +17,8 @@
 
 #define LOG_TAG "2.3_material.cpp"
 
-static GLuint cubeVAO, lightVAO, texture;
+static GLuint cubeVAO, lightVAO;
+static GLuint texture_diff, texture_spec, texture_emission;
 static Shader boxShader, lightShader;
 static Camera camera;
 static int time_elapse;
@@ -50,7 +51,8 @@ void main(){
 
 uniform struct{
     sampler2D diffuse;//环境光和反射光一致
-    highp vec3 specular;
+    sampler2D specular;//镜面光纹理
+    sampler2D emission;//放射光纹理
     highp float shininess;
 } material;
 
@@ -71,26 +73,27 @@ uniform highp vec3 viewPos;
 
 void main()
 {
-    highp vec3 texColor = texture(material.diffuse, TexCoord).rgb;  //纹理颜色
-   // ambient
-   highp vec3 ambient = texColor * light.ambient;                   //环境光(光源颜色x环境光因子)
+    highp vec3 diffColor = vec3(texture(material.diffuse, TexCoord)).rgb;
+    highp vec3 specColor = vec3(texture(material.specular, TexCoord)).rgb;
+    // ambient
+    highp vec3 ambient = diffColor * light.ambient;
+ 
+    // diffuse
+    highp vec3 norm = normalize(Normal);                            
+    highp vec3 lightDir = normalize(light.position - FragPos);      
+    highp float diff = max(dot(norm, lightDir), 0.0);               
+    highp vec3 diffuse = diffColor * diff * light.diffuse;
+ 
+    //specular                                                      
+    highp vec3 viewDir = normalize(viewPos-FragPos);                
+    highp vec3 reflectDir = reflect(-lightDir, norm);               
+    highp float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    highp vec3 specular = specColor * spec * light.specular;
 
-   // diffuse
-   highp vec3 norm = normalize(Normal);                             //规范化法向量
-   highp vec3 lightDir = normalize(light.position - FragPos);       //计算光的投射方向(光源-物体顶点)
-   highp float diff = max(dot(norm, lightDir), 0.0);                //计算点乘, 结果代表反射光的强度
-   highp vec3 diffuse = texColor * diff * light.diffuse;            //计算反射光
+    //emission
+    highp vec3 emission = vec3(texture(material.emission, TexCoord)).rgb;
 
-   //specular                                                       //镜面光
-   highp vec3 viewDir = normalize(viewPos-FragPos);                 //视线向量
-   highp vec3 reflectDir = reflect(-lightDir, norm);                //反射光向量
-   highp float spec = pow(max(dot(viewDir, reflectDir), 0.0),
-                material.shininess);                                //计算镜面光光强
-   highp vec3 specular = material.specular * spec * light.specular; //光照之镜面光分量
-
-   //light result
-   highp vec3 result = ambient + diffuse + specular;                //环境光+反射光
-   FragColor = vec4(result, 1.0);
+    FragColor = vec4(ambient + diffuse + specular+emission, 1.0);
 }
     )";
     boxShader = Shader(box_vs, box_fs);
@@ -197,9 +200,13 @@ void main()
 
     camera.Position = glm::vec3(2,2,5);
 
-    texture = TextureUtil::load("container2.png");
+    texture_diff     = TextureUtil::load("container2.png");
+    texture_spec     = TextureUtil::load("container2_specular.png");
+    texture_emission = TextureUtil::load("matrix.jpg");
     boxShader.use();
     boxShader.setInt("material.diffuse", 0);
+    boxShader.setInt("material.specular", 1);
+    boxShader.setInt("material.emission", 2);
     boxShader.unUse();
 }
 
@@ -207,6 +214,12 @@ static void onDraw(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     boxShader.use();
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_diff);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_spec);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_emission);
 
     glm::mat4 model, view, projection;
     view = camera.GetViewMatrix();
@@ -228,9 +241,9 @@ static void onDraw(){
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
     //todo test
-    lightColor = glm::vec3(1.0f);
-    diffuseColor = glm::vec3(1.0f);
-    ambientColor = glm::vec3(1.0f);
+//    lightColor = glm::vec3(1.0f);
+//    diffuseColor = glm::vec3(1.0f);
+//    ambientColor = glm::vec3(1.0f);
     boxShader.setVec3("light.ambient", ambientColor);
     boxShader.setVec3("light.diffuse", diffuseColor);
     boxShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);

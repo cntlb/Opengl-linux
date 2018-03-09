@@ -16,7 +16,8 @@ public:
         glBindTexture(GL_TEXTURE_2D, texture);
 
         int w,h,channels;
-        stbi_uc* image = stbi_load(path, &w, &h, &channels, 0);
+        std::string pathName = std::string("../res/")+std::string(path);
+        stbi_uc* image = stbi_load(pathName.c_str(), &w, &h, &channels, 0);
         GLint format;
         if(channels == 1){
             format = GL_RED;
@@ -32,7 +33,7 @@ public:
             texParamFunc();
             stbi_image_free(image);
         }else{
-            LOGE("%s", "load texture data error!");
+            LOGE("load texture error! file: %s", pathName.c_str());
             stbi_image_free(image);
         }
         return texture;

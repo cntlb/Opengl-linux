@@ -75,6 +75,8 @@ leanopengl_cpp(2.2_light3)
 leanopengl_cpp(2.3_material)
 leanopengl_cpp(2.3_material2)
 leanopengl_cpp(2.4_texture)
+leanopengl_cpp(2.4_texture2)
+leanopengl_cpp(2.4_texture3)
 
 
 
