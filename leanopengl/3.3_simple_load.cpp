@@ -10,6 +10,7 @@
 #include <mylib/Shader.h>
 #include <sstream>
 #include <mylib/TextureUtil.h>
+#include <mylib/FileSys.h>
 
 #define LOG_TAG "3.3_simple_load.cpp"
 using namespace std;
@@ -47,7 +48,7 @@ static Camera camera;
 
 static void onPreDraw(){
     // https://github.com/wangdingqiao/noteForOpenGL/blob/master/resources/models/cube/cube.obj
-    loadObj("/home/jmu/desktop/untitled.obj", data);
+    loadObj(Resource("cube/cube.obj"), data);
     const vector<Vertex> &vertices = rmIndices(data);
 
     glEnable(GL_DEPTH_TEST);
