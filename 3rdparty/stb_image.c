@@ -1,6 +1,8 @@
 //
 // Created by jmu on 18-3-2.
 //
+#ifndef STB_IMAGE_IMPL
+#define STB_IMAGE_IMPL
 #include "stb_image.h"
 
 #if defined(STBI_ONLY_JPEG) || defined(STBI_ONLY_PNG) || defined(STBI_ONLY_BMP) \
@@ -6768,7 +6770,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
    stbi__start_callbacks(&s, (stbi_io_callbacks *) c, user);
    return stbi__is_16_main(&s);
 }
-
+#endif
 /*
    revision history:
       2.19  (2018-02-11) fix warning
