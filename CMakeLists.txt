@@ -94,4 +94,5 @@ function(leanopengl_assimp name)
 endfunction()
 leanopengl_assimp(3.1_assimp)
 leanopengl_assimp(3.3_model_loading)
+leanopengl_assimp(3.3_simple_load)
 
