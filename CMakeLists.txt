@@ -82,6 +82,7 @@ leanopengl_cpp(2.4_texture3)
 function(leanopengl_assimp name)
     project(${name})
         set(CMAKE_CXX_FLAGS  -std=c++14)
+        ADD_DEFINITIONS(-DROOT="${CMAKE_SOURCE_DIR}")
         include_directories(3rdparty)
         link_directories(libs)
         add_executable(${name}

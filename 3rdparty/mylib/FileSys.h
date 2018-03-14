@@ -4,7 +4,10 @@
 
 #ifndef INC_3_3_SIMPLE_LOAD_FILESYS_H
 #define INC_3_3_SIMPLE_LOAD_FILESYS_H
-#define ROOT "/home/jmu/workspaces/clion/Opengl-linux/"
+
+#ifndef ROOT
+#error 'ROOT'根目录未指定
+#endif
 
 #include <string>
 
@@ -14,6 +17,9 @@ class FileSys {
 public:
     FileSys(string path, bool useCurrentSys = true) {
         if (useCurrentSys) {
+            string root(ROOT);
+            if(root[root.length()-1] != '/')
+                root += "/";
             pathName = string(ROOT) + path;
         } else {
             pathName = path;
@@ -28,13 +34,14 @@ private:
     string pathName;
 };
 
-#define RES_ROOT ROOT"res/"
-
 class Resource {
 public:
     Resource(string path, bool useCurrentSys = true) {
         if (useCurrentSys) {
-            pathName = string(RES_ROOT) + path;
+            string root(ROOT);
+            if(root[root.length()-1] != '/')
+                root += "/";
+            pathName = root + "res/" + path;
         } else {
             pathName = path;
         }
